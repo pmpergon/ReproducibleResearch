@@ -55,6 +55,7 @@ the following R libraries were necessary for this analysis
 library (data.table)
 library( plyr)
 library(lattice)
+library(ggplot2)
 ```
 ---
 ## What is mean total number of steps taken per day?  
@@ -183,6 +184,7 @@ histogram(~log10(steps)|date, data=activity2,layout=c(7,9), main="Mean Imputed D
 ---
 ## Are there differences in activity patterns between weekdays and weekends?  
 
+To realy asses this question one has to compare not only weekdays as a whole versus weekends as a whole but each week day:  
 ```{r}
 activity3$date <- as.POSIXlt(activity3$date)
 activity3$day <-weekdays(as.Date(activity3$date))
@@ -192,6 +194,7 @@ activity3$day <- factor(activity3$day, levels= c("Monday",
 weekly.steps <- by(activity3$steps, as.factor(activity3$day), mean)
 ```
 
+The resulting plot  bellow indicates that step per five minute interval increases in the weekends and in the middle of the week. Without knowing the particular activities of the inividual monitored, the elevated average number of steps on a Wednesday could be due to any number of reasons. It is also evident that the "weekend" trend starts on Friday, a day that needs to be included as part of the weekend:
 
 ```{r}
 plot(weekly.steps, main = "Number of steps by day of the week", 
@@ -200,4 +203,17 @@ axis(1, at = 1:7, labels=c("Monday","Tuesday", "Wednesday", "Thursday", "Friday"
 abline(h=mean(weekly.steps), col=3, lty=2)
 ```
 
+What is the average Wednesday trend per interval along the day? Is it different form the Friday and saturday and Sunday trends? Is ther a particular time of the day for the elevated count?
+
+The combined plot of step activity per day reveals that the differnce between the high and low average days is due to an increase in activities requiering lower number of steps and, in the case of the Friday, Saturday, Sunday pattern, an increase in large number of step activities towards the latter part of the day:  
+
+```{r}
+qplot(interval, steps, data=activity3, facets=.~day, color=day, alpha=.5 )
+```
+
+
+---
+---
+
+### END
  
