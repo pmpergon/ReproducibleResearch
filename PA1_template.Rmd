@@ -1,8 +1,10 @@
 ---
-title: " PA1_template.Rmd"
+title: ' PA1_template.Rmd'
 author: "pmp"
 date: "Thursday, November 13, 2014"
-output: html_document
+output:
+  html_document:
+    keep_md: yes
 ---
 
 ## REPRODUCIBLE RESEARCH - Peer Assessment Project 1
@@ -57,7 +59,10 @@ library( plyr)
 library(lattice)
 library(ggplot2)
 ```
+
 ---
+---
+
 ## What is mean total number of steps taken per day?  
 
 Histograms representing the distribution of number of steps per day, show a similar range in the frequency distribution values, as well as, in the number of steps per interval. 
@@ -117,11 +122,13 @@ plot (daily.activity$interval, daily.activity$steps, type="l",
 axis(1,at = c(0,6,12,18,24))
 ```
 
-With the 104th interval corresponding to 8:35am 
+With the 104th interval, corresponding to the 8:35am interval, showing the highest mean step activity from October to November 2012 for the given monitored individual
+
 ```{r}
 daily.activity[x,]
 ```
-showing the highest mean step activity from October to november 2012 for the given monitored individual  
+
+  
 ---
 #  Imputing missing values  
 

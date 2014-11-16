@@ -86,7 +86,10 @@ library(ggplot2)
 ```
 ## Warning: package 'ggplot2' was built under R version 3.1.2
 ```
+
 ---
+---
+
 ## What is mean total number of steps taken per day?  
 
 Histograms representing the distribution of number of steps per day, show a similar range in the frequency distribution values, as well as, in the number of steps per interval. 
@@ -228,7 +231,8 @@ axis(1,at = c(0,6,12,18,24))
 
 ![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
 
-With the 104th interval corresponding to 8:35am 
+With the 104th interval, corresponding to the 8:35am interval, showing the highest mean step activity from October to November 2012 for the given monitored individual
+
 
 ```r
 daily.activity[x,]
@@ -238,7 +242,8 @@ daily.activity[x,]
 ##     interval    steps
 ## 104     8.35 206.1698
 ```
-showing the highest mean step activity from October to november 2012 for the given monitored individual  
+
+  
 ---
 #  Imputing missing values  
 
@@ -293,7 +298,7 @@ comparison
 ##                                  c.mean.steps..mean2.steps..mean3.steps.
 ## Original NA removed dataset mean                                37.38260
 ## Mean imputet dataset mean                                       37.38260
-## Randomly imputet datataset mean                                 37.18186
+## Randomly imputet datataset mean                                 37.63058
 ```
 
 I will use the dataset "acitivty3" for further comparisons.
@@ -323,7 +328,7 @@ summary (activity3)
 ##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0  
 ##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8  
 ##  Median :  0.00   2012-10-03:  288   Median :1177.5  
-##  Mean   : 37.18   2012-10-04:  288   Mean   :1177.5  
+##  Mean   : 37.63   2012-10-04:  288   Mean   :1177.5  
 ##  3rd Qu.: 12.00   2012-10-05:  288   3rd Qu.:1766.2  
 ##  Max.   :806.00   2012-10-06:  288   Max.   :2355.0  
 ##                   (Other)   :15840
