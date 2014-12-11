@@ -59,7 +59,7 @@ The dataset contains three variables representing:
 
 # Data Processing  
 
-the following R libraries were necessary for this analysis  
+the following R libraries were necessary for this report  
 
 
 ```r
@@ -87,11 +87,17 @@ library(ggplot2)
 ## Warning: package 'ggplot2' was built under R version 3.1.2
 ```
 
----
----
+```r
+library(grid)
+library(gridExtra)
+```
 
-## What is mean total number of steps taken per day?  
+```
+## Warning: package 'gridExtra' was built under R version 3.1.2
+```
 
+
+## Removing NA values
 Histograms representing the distribution of number of steps per day, show a similar range in the frequency distribution values, as well as, in the number of steps per interval. 
 
 
@@ -110,105 +116,70 @@ histogram(~log10(steps)|date, data=activity,layout=c(7,9), par.strip.text=list(c
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
-One can notice very clearly that most of the missing data (NA values) corresponds not so much with isolated measurementa but with the absence of recorded measurments in nine of the 61 days monitored.  
+One can notice very clearly that most of the missing data (NA values) corresponds not so much with isolated measurementa but with the absence of recorded measurments in nine of the 61 days monitored.
 
-The frequency distribution for all number of steps per interval is given in the next log base 10 histogram:  
-
-
-```r
-hist(log10(activity$steps), main = "Number of steps", xlab="log10 of number of steps per interval", ylab="frequencey")
-```
-
-![](PA1_template_files/figure-html/]-1.png) 
-
-From the summary results of the "activity.csv" file, the overall mean and median of steps per interval for the whole data sets are reported as  
-
-* a mean of 37.38 steps per interval, and 
-* a median of 0.00 steps per interval
-
-The table "mean.activities" collects the values for the means and medians for the number of steps for each day in the sample
-
+## Data set without missing values
 
 ```r
-dt <- data.table(activity)
-mean.activities <- dt[,list(mean=mean(steps),median=as.double(median(steps))),by=date]
-mean.activities
+activity1 <- activity[complete.cases(activity),]
+summary (activity1)
 ```
 
 ```
-##           date       mean median
-##  1: 2012-10-01         NA     NA
-##  2: 2012-10-02  0.4375000      0
-##  3: 2012-10-03 39.4166667      0
-##  4: 2012-10-04 42.0694444      0
-##  5: 2012-10-05 46.1597222      0
-##  6: 2012-10-06 53.5416667      0
-##  7: 2012-10-07 38.2465278      0
-##  8: 2012-10-08         NA     NA
-##  9: 2012-10-09 44.4826389      0
-## 10: 2012-10-10 34.3750000      0
-## 11: 2012-10-11 35.7777778      0
-## 12: 2012-10-12 60.3541667      0
-## 13: 2012-10-13 43.1458333      0
-## 14: 2012-10-14 52.4236111      0
-## 15: 2012-10-15 35.2048611      0
-## 16: 2012-10-16 52.3750000      0
-## 17: 2012-10-17 46.7083333      0
-## 18: 2012-10-18 34.9166667      0
-## 19: 2012-10-19 41.0729167      0
-## 20: 2012-10-20 36.0937500      0
-## 21: 2012-10-21 30.6284722      0
-## 22: 2012-10-22 46.7361111      0
-## 23: 2012-10-23 30.9652778      0
-## 24: 2012-10-24 29.0104167      0
-## 25: 2012-10-25  8.6527778      0
-## 26: 2012-10-26 23.5347222      0
-## 27: 2012-10-27 35.1354167      0
-## 28: 2012-10-28 39.7847222      0
-## 29: 2012-10-29 17.4236111      0
-## 30: 2012-10-30 34.0937500      0
-## 31: 2012-10-31 53.5208333      0
-## 32: 2012-11-01         NA     NA
-## 33: 2012-11-02 36.8055556      0
-## 34: 2012-11-03 36.7048611      0
-## 35: 2012-11-04         NA     NA
-## 36: 2012-11-05 36.2465278      0
-## 37: 2012-11-06 28.9375000      0
-## 38: 2012-11-07 44.7326389      0
-## 39: 2012-11-08 11.1770833      0
-## 40: 2012-11-09         NA     NA
-## 41: 2012-11-10         NA     NA
-## 42: 2012-11-11 43.7777778      0
-## 43: 2012-11-12 37.3784722      0
-## 44: 2012-11-13 25.4722222      0
-## 45: 2012-11-14         NA     NA
-## 46: 2012-11-15  0.1423611      0
-## 47: 2012-11-16 18.8923611      0
-## 48: 2012-11-17 49.7881944      0
-## 49: 2012-11-18 52.4652778      0
-## 50: 2012-11-19 30.6979167      0
-## 51: 2012-11-20 15.5277778      0
-## 52: 2012-11-21 44.3993056      0
-## 53: 2012-11-22 70.9270833      0
-## 54: 2012-11-23 73.5902778      0
-## 55: 2012-11-24 50.2708333      0
-## 56: 2012-11-25 41.0902778      0
-## 57: 2012-11-26 38.7569444      0
-## 58: 2012-11-27 47.3819444      0
-## 59: 2012-11-28 35.3576389      0
-## 60: 2012-11-29 24.4687500      0
-## 61: 2012-11-30         NA     NA
-##           date       mean median
+##      steps                date          interval     
+##  Min.   :  0.00   2012-10-02:  288   Min.   :   0.0  
+##  1st Qu.:  0.00   2012-10-03:  288   1st Qu.: 588.8  
+##  Median :  0.00   2012-10-04:  288   Median :1177.5  
+##  Mean   : 37.38   2012-10-05:  288   Mean   :1177.5  
+##  3rd Qu.: 12.00   2012-10-06:  288   3rd Qu.:1766.2  
+##  Max.   :806.00   2012-10-07:  288   Max.   :2355.0  
+##                   (Other)   :13536
 ```
+---
+---
 
-Summarized for the mean values in the following barchart:
+# Analysis and Data Query:
+---
 
+## What is the mean total number of steps taken per day?  
+
+The mean and median values for the number of steps per day were calculated form the sum of steps for all intervals in a given day, its distribution of values shown below:
 
 ```r
-barchart(~mean|date, data=mean.activities, layout=c(7,9), main="summary of mean daily values",par.strip.text=list(cex=.75))
+steps.day <- aggregate(activity1$steps,by=list(activity1$date),sum)
+mean.activity <- mean(steps.day$x)
+median.activity <- median(steps.day$x)
+hist(steps.day$x, breaks=30, col="orange", main = "Number of steps per day", xlab="number of steps", ylab="frequencey")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
+
+For comparison, the mean and median steps per interval, were also calculated
+
+```r
+mean.steps <- mean (activity1$steps,na.rm=TRUE)
+sd.activity <- sd(steps.day$x)
+median.steps <- median(activity1$steps,na.rm=TRUE)
+
+df<- data.frame(mean.activity,sd.activity,median.activity,mean.steps,median.steps)
+colnames(df) <-c("- mean per day","+/- sdev per day","- median per day", "- mean per interval", "-median per interval-")
+```
+
+as shown in the table below
+
+```r
+df
+```
+
+```
+##   - mean per day +/- sdev per day - median per day - mean per interval
+## 1       10766.19          4269.18            10765             37.3826
+##   -median per interval-
+## 1                     0
+```
+ 
+
+
 ---
 
 ## What is the average daily activity pattern?  
@@ -229,7 +200,7 @@ plot (daily.activity$interval, daily.activity$steps, type="l",
 axis(1,at = c(0,6,12,18,24))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
 
 With the 104th interval, corresponding to the 8:35am interval, showing the highest mean step activity from October to November 2012 for the given monitored individual
 
@@ -243,7 +214,7 @@ daily.activity[x,]
 ## 104     8.35 206.1698
 ```
 
-  
+---  
 ---
 #  Imputing missing values  
 
@@ -261,7 +232,7 @@ number.na
 The use of imputation depends on the nature of the data [Missing data imputation](http://www.stat.columbia.edu/~gelman/arm/missing.pdf)]. As an example of the process, and how the methods used might or might not introduce changes in the general statistics of the data, I will use two imputation methods, one based on the mean and a second one based on a random sellection of values to replace missing values.The techniques are borrowed form [Thomas Leeper](http://thomasleeper.com/Rcourse/Tutorials/NAhandling.html).  
 
 
-a new imputet dataset named "activity2" is based on mean value substitutions:
+A new imputet dataset named "activity2" is based on mean value substitutions:
 
 
 ```r
@@ -279,62 +250,9 @@ activity3$steps[is.na(activity3$steps)] <- sample(activity3$steps[!is.na(activit
                                             sum(is.na(activity3$steps)), TRUE)
 ```
 
-Comparisons
+### Comparisons of the two imputatation methods vs the original data 
 
-```r
-mean.steps <- mean (activity$steps,na.rm=TRUE)
-median.steps <- median(activity$steps,na.rm=TRUE)
-mean2.steps <- mean (activity2$steps,na.rm=TRUE)
-median2.steps <- median(activity2$steps,na.rm=TRUE)
-mean3.steps <- mean (activity3$steps,na.rm=TRUE)
-median3.steps <- median(activity3$steps,na.rm=TRUE)
-comparison <- data.frame(c(mean.steps,mean2.steps,mean3.steps))
-row.names (comparison) <- c("Original NA removed dataset mean","Mean imputet dataset mean", "Randomly imputet datataset mean")
-
-comparison
-```
-
-```
-##                                  c.mean.steps..mean2.steps..mean3.steps.
-## Original NA removed dataset mean                                37.38260
-## Mean imputet dataset mean                                       37.38260
-## Randomly imputet datataset mean                                 37.63058
-```
-
-I will use the dataset "acitivty3" for further comparisons.
-
-
-```r
-summary (activity)
-```
-
-```
-##      steps                date          interval     
-##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0  
-##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8  
-##  Median :  0.00   2012-10-03:  288   Median :1177.5  
-##  Mean   : 37.38   2012-10-04:  288   Mean   :1177.5  
-##  3rd Qu.: 12.00   2012-10-05:  288   3rd Qu.:1766.2  
-##  Max.   :806.00   2012-10-06:  288   Max.   :2355.0  
-##  NA's   :2304     (Other)   :15840
-```
-
-```r
-summary (activity3)
-```
-
-```
-##      steps                date          interval     
-##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0  
-##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8  
-##  Median :  0.00   2012-10-03:  288   Median :1177.5  
-##  Mean   : 37.63   2012-10-04:  288   Mean   :1177.5  
-##  3rd Qu.: 12.00   2012-10-05:  288   3rd Qu.:1766.2  
-##  Max.   :806.00   2012-10-06:  288   Max.   :2355.0  
-##                   (Other)   :15840
-```
-
-The daily histograms of step numbers:
+First in terms of the distributions of the step numbers per interval per day:
 
 ```r
 histogram(~log10(steps)|date, data=activity,layout=c(7,9), main="Original Dataset", par.strip.text=list(cex=.75))
@@ -347,8 +265,8 @@ histogram(~log10(steps)|date, data=activity3,layout=c(7,9), main="Random Value I
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-15-2.png) 
- fills in those days with missing data with similarly distributed frequency values as those observed for other days, suggesting that the random value imputation method recreates the frequency distribution observed in the original data fearly well.  
-The use of the mean value imputation does alter the distribution patterns for those days with missing values:
+We can noticed that the random sellection values method (RSVM) fills in those days with missing data with similarly distributed frequency distributions as those observed for other days, suggesting that the RSV imputation method recreates the frequency distribution observed in the original data fearly well.  
+The use of the mean value imputation, on the other hand, does alter the distribution patterns for those days with missing values but not the overall means:
 
 ```r
 histogram(~log10(steps)|date, data=activity2,layout=c(7,9), main="Mean Imputed Dataset", par.strip.text=list(cex=.75))
@@ -356,9 +274,78 @@ histogram(~log10(steps)|date, data=activity2,layout=c(7,9), main="Mean Imputed D
 
 ![](PA1_template_files/figure-html/unnamed-chunk-16-1.png) 
 ---
+Second, comparing the distributions of steps per day between the original data set and the RSV imputation is shown in the plot below:
+
+
+```r
+steps.day3 <- aggregate(activity3$steps,by=list(activity3$date),sum)
+
+steps.day$method <- "none"
+steps.day3$method <- "RVS imputed"
+
+comparison <- rbind(steps.day,steps.day3)
+ggplot(comparison, aes((x), fill=method)) + geom_density(alpha=.2)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-17-1.png) 
+
+The plot shows that, as would be expected, the total number of steps is higher in the RSV imputed data set compared to the original data set. As far as the RSV imputed data set being a valid correction of missing values is in part supported by the distributions being very similar between the two data sets, although the RSV imputation has smoothed the original distribution eliminating some of the dataset's no-random normal characteristics.
+
+The R summary of the RSV imputed data set (activity3) is compared to the summary of the NA removed original data set (activity1)
+
+```r
+summary (activity1)
+```
+
+```
+##      steps                date          interval     
+##  Min.   :  0.00   2012-10-02:  288   Min.   :   0.0  
+##  1st Qu.:  0.00   2012-10-03:  288   1st Qu.: 588.8  
+##  Median :  0.00   2012-10-04:  288   Median :1177.5  
+##  Mean   : 37.38   2012-10-05:  288   Mean   :1177.5  
+##  3rd Qu.: 12.00   2012-10-06:  288   3rd Qu.:1766.2  
+##  Max.   :806.00   2012-10-07:  288   Max.   :2355.0  
+##                   (Other)   :13536
+```
+
+```r
+summary (activity3)
+```
+
+```
+##      steps                date          interval     
+##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0  
+##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8  
+##  Median :  0.00   2012-10-03:  288   Median :1177.5  
+##  Mean   : 37.03   2012-10-04:  288   Mean   :1177.5  
+##  3rd Qu.: 12.00   2012-10-05:  288   3rd Qu.:1766.2  
+##  Max.   :806.00   2012-10-06:  288   Max.   :2355.0  
+##                   (Other)   :15840
+```
+ and the table below compares the mean +/- standrad deviation of dayly average steps between the imputed and original data set:
+
+```r
+mean.activity3 <- mean(steps.day3$x)
+sd.activity3<- sd(steps.day3$x)
+median.activity3 <- median(steps.day3$x)
+df2<- data.frame(mean.activity,sd.activity,mean.activity3,sd.activity3)
+colnames(df2) <-c("- mean per day","+/- sdev per day","- imputetd mean per day","+/- sdev per day -")
+df2
+```
+
+```
+##   - mean per day +/- sdev per day - imputetd mean per day
+## 1       10766.19          4269.18                10665.38
+##   +/- sdev per day -
+## 1            4022.21
+```
+
+---
 ## Are there differences in activity patterns between weekdays and weekends?  
 
-To realy asses this question one has to compare not only weekdays as a whole versus weekends as a whole but each week day:  
+For the next query we are using the RVSM imputated data set for the analysis. 
+
+Before embarking in the presumption that there is a differnce between weekday and weekend activies one needs to compare not only weekdays  versus weekends as a whole but each week day versus each other:  
 
 ```r
 activity3$date <- as.POSIXlt(activity3$date)
@@ -369,7 +356,7 @@ activity3$day <- factor(activity3$day, levels= c("Monday",
 weekly.steps <- by(activity3$steps, as.factor(activity3$day), mean)
 ```
 
-The resulting plot  bellow indicates that step per five minute interval increases in the weekends and in the middle of the week. Without knowing the particular activities of the inividual monitored, the elevated average number of steps on a Wednesday could be due to any number of reasons. It is also evident that the "weekend" trend starts on Friday, a day that needs to be included as part of the weekend:
+The resulting plot  bellow indicates that steps per five minute interval increases in the weekends and in the middle of the week. Without knowing the particular activities of the inividual monitored, the elevated average number of steps per interval on a Wednesday could also be due to an increased stepping tempo. It is also evident that the "weekend" trend starts on Friday, a day that needs to be included as part of the weekend:
 
 
 ```r
@@ -379,19 +366,156 @@ axis(1, at = 1:7, labels=c("Monday","Tuesday", "Wednesday", "Thursday", "Friday"
 abline(h=mean(weekly.steps), col=3, lty=2)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-18-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-21-1.png) 
 
-What is the average Wednesday trend per interval along the day? Is it different form the Friday and saturday and Sunday trends? Is ther a particular time of the day for the elevated count?
+A better insight of the average weekly 24 hour activity pattern is shown in the next plot generated comparing the average day of the week 24 hour activity. 
 
-The combined plot of step activity per day reveals that the differnce between the high and low average days is due to an increase in activities requiering lower number of steps and, in the case of the Friday, Saturday, Sunday pattern, an increase in large number of step activities towards the latter part of the day:  
+### Day of the week datasets:
+
+```r
+Monday.steps <- subset( activity, activity3$day =="Monday")
+Monday.activity <- aggregate(steps~interval, data=Monday.steps, mean)
+Monday.activity <- mutate(Monday.activity,interval=(interval/100))
+
+Tuesday.steps <- subset( activity, activity3$day =="Tuesday")
+Tuesday.activity <- aggregate(steps~interval, data=Tuesday.steps, mean)
+Tuesday.activity <- mutate(Tuesday.activity,interval=(interval/100))
+
+Wednesday.steps <- subset( activity, activity3$day =="Wednesday")
+Wednesday.activity <- aggregate(steps~interval, data=Wednesday.steps, mean)
+Wednesday.activity <- mutate(Wednesday.activity,interval=(interval/100))
+
+Thursday.steps <- subset( activity, activity3$day =="Thursday")
+Thursday.activity <- aggregate(steps~interval, data=Thursday.steps, mean)
+Thursday.activity <- mutate(Thursday.activity,interval=(interval/100))
+
+Friday.steps <- subset( activity, activity3$day =="Friday")
+Friday.activity <- aggregate(steps~interval, data=Friday.steps, mean)
+Friday.activity <- mutate(Friday.activity,interval=(interval/100))
+
+Saturday.steps <- subset( activity, activity3$day =="Saturday")
+Saturday.activity <- aggregate(steps~interval, data=Saturday.steps, mean)
+Saturday.activity <- mutate(Saturday.activity,interval=(interval/100))
+
+Sunday.steps <- subset( activity, activity3$day =="Sunday")
+Sunday.activity <- aggregate(steps~interval, data=Sunday.steps, mean)
+Sunday.activity <- mutate(Sunday.activity,interval=(interval/100))
+```
+
+
+###  Plot of Day of the Week activities
+Orange corresponds to the standard weekdays (Monday through Thursday) and blue corresponds to the weekend days (Friday through Sunday). The y scale is fixed between 0 and 350 steps. 
 
 
 ```r
-qplot(interval, steps, data=activity3, facets=.~day, color=day, alpha=.5 )
+plot.new()
+
+par (mar=c(1,1,1,1))
+par(mfrow = c(5, 2), cex=.5)
+
+plot (Monday.activity$interval, Monday.activity$steps, type="l", ylim=c(0,350), col="orange",
+      main =" Monday activity",xlab="hours", ylab="average number of steps",
+      xaxt='n')
+axis(1,at = c(0,6,12,18,24))
+plot (Friday.activity$interval, Friday.activity$steps, type="l", ylim=c(0,350), col="blue",
+      main =" Friday activity",xlab="hours", ylab="average number of steps",
+      xaxt='n') 
+axis(1,at = c(0,6,12,18,24))
+plot (Tuesday.activity$interval, Tuesday.activity$steps, type="l", ylim=c(0,350),col="orange",
+      main ="Tuesday activity",xlab="hours", ylab="average number of steps",
+      xaxt='n')
+axis(1,at = c(0,6,12,18,24))
+plot (Saturday.activity$interval, Saturday.activity$steps, type="l", ylim=c(0,350), col="blue",
+      main =" Saturday activity",xlab="hours", ylab="average number of steps",
+      xaxt='n')
+axis(1,at = c(0,6,12,18,24))
+plot (Wednesday.activity$interval, Wednesday.activity$steps, type="l", ylim=c(0,350),col="orange",
+      main ="Wednesday activity",xlab="hours", ylab="average number of steps",
+      xaxt='n')
+axis(1,at = c(0,6,12,18,24))
+plot (Sunday.activity$interval, Sunday.activity$steps, type="l", ylim=c(0,350), col="blue",
+      main =" Sunday activity",xlab="hours", ylab="average number of steps",
+      xaxt='n')
+axis(1,at = c(0,6,12,18,24))
+plot (Thursday.activity$interval, Thursday.activity$steps, type="l", ylim=c(0,350),col="orange",
+      main ="Thursday activity",xlab="hours", ylab="average number of steps",
+      xaxt='n')
+axis(1,at = c(0,6,12,18,24))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-19-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-23-1.png) 
+Three main patterns are evident from the data:
+-  Somewhere between 8am and 9am this individum performed the longest consecutive walk/run except for Sunday
+-  Thursday is the day with the least number of steps but with two consectuive long walks/runs 
+-  The weekend days have the highest overal daily activity.
 
+### Are the differences between Weekdays and Weekend activity significant?
+
+
+
+```r
+selection <- c("Monday","Tuesday","Thursday")
+Weekday.steps <- subset( activity, activity3$day == selection)
+Weekday.mean.steps <- aggregate(Weekday.steps$steps,by=list(Weekday.steps$date),sum)
+mean.weekday <- mean(Weekday.steps$steps, na.rm=TRUE)
+
+mean.Weekday.day <- mean(aggregate(Weekday.steps$steps,by=list(Weekday.steps$date),sum)$x, na.rm=TRUE)
+sd.Weekday.day <- sd(aggregate(Weekday.steps$steps,by=list(Weekday.steps$date),sum)$x, na.rm=TRUE)
+
+selection2 <- c("Friday","Saturday","Sunday")
+Weekend.steps <- subset( activity, activity3$day == selection2)
+Weekend.mean.steps <- aggregate(Weekend.steps$steps,by=list(Weekend.steps$date),sum)
+mean.weekend <- mean(Weekend.steps$steps, na.rm=TRUE)
+
+mean.Weekend.day <- mean(aggregate(Weekend.steps$steps,by=list(Weekend.steps$date),sum)$x, na.rm=TRUE)
+sd.Weekend.day <- sd(aggregate(Weekend.steps$steps,by=list(Weekend.steps$date),sum)$x, na.rm=TRUE)
+```
+
+The next plot compares the average daily values for the weekdays vs the weekends. One can see a definite increase in the mean of the values, as well as, a bias towards larges numbers of steps during the weekend:
+
+
+```r
+p1<- qplot(Group.1, x, data=Weekday.mean.steps, geom="boxplot", ylim=c(0,7000), alpha=.5, main="weekdays" )
+p1 <- p1 + theme(axis.title.x=element_blank()) + geom_hline(aes(yintercept=mean.Weekday.day))
+
+p2 <-qplot(Group.1, x, data=Weekend.mean.steps, geom="boxplot", ylim=c(0,7000), alpha=.5, main="weekend" )
+p2 <- p2 + theme(axis.title.x=element_blank()) + geom_hline(aes(yintercept=mean.Weekend.day))
+grid.arrange(p1,p2,ncol=2,main="comparison between weekdays and weekend log10 of steps")
+```
+
+```
+## Warning: Removed 3 rows containing non-finite values (stat_boxplot).
+```
+
+```
+## Warning: Removed 4 rows containing non-finite values (stat_boxplot).
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-25-1.png) 
+
+Both the mean per interval number of steps and the mean per daily steps is increased during the weekend. "Speedy Gonzales on the weekends!"
+
+```r
+df3<- data.frame(mean.weekday,mean.weekend)
+colnames(df3) <-c("- mean per interval per weekday","- mean per interval per weekend -")
+df3
+```
+
+```
+##   - mean per interval per weekday - mean per interval per weekend -
+## 1                         31.5178                          42.78819
+```
+
+```r
+df4<- data.frame(mean.Weekday.day,sd.Weekday.day,mean.Weekend.day,sd.Weekend.day)
+colnames(df4) <-c("- mean per day per weekday"," +/- SD","- mean per day per weekend"," +/- SD -")
+df4
+```
+
+```
+##   - mean per day per weekday   +/- SD - mean per day per weekend  +/- SD -
+## 1                   3025.708 1636.366                   4107.667  1256.119
+```
 
 ---
 ---
