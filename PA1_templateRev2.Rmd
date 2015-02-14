@@ -84,16 +84,16 @@ summary (activity1)
   
 ### What is the total number of steps taken per day?  
 
-The number of steps per day are compared among the 53 days of measurments in the bar graph below:
+The number of steps per day are compared among the 53 days of measurments in the bar graph below:  
 ```{r calculation of total number of steps per day, echo=FALSE}
-plot.new()
-par("mar")
+# plot.new()
+# par("mar")
 steps.day <- aggregate(activity1$steps,by=list(activity1$date),sum)
 steps<- steps.day$x
 doy<-yday(steps.day$Group.1)
 ```
+Figure 2. 
 
-Figure 2.  
 ```{r comparison of total number of steps per day, echo=FALSE}
 b<- barplot(steps, main="total steps per day", 
             sub="from October 2nd to November 29th 2012", xlab="day of the year", ylab="steps")
